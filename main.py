@@ -25,7 +25,6 @@ def cleanData(data):
           entry[key] = split[0]
     except:
       print("Error Code: 2")
-      time.sleep(86400)
   return data
 
 
@@ -90,15 +89,25 @@ def rankSchools(schools, selection, dataBase):
   selectedSchools = [i for i in schools]
   ranking = dict()
   for school in selectedSchools:
-    ranking[school] = dataBase[school][selection]
+      ranking[school] = dataBase[school][selection]
   for i in range(len(selectedSchools)):
-    for i in range(len(selectedSchools)):
-      if i != len(selectedSchools)-1:
-        if (ranking[selectedSchools[i]] < ranking[selectedSchools[i+1]]) or (ranking[selectedSchools[i]] == ranking[selectedSchools[i+1]]):
-          selectedSchools[i], selectedSchools[i+1] = selectedSchools[i+1], selectedSchools[i]
-  for i in range(len(selectedSchools)):
-    dataBase[selectedSchools[i]]["Rank"] = i+1
-  return selectedSchools
+      for i in range(len(selectedSchools)):
+          if i != len(selectedSchools) - 1:
+              if (
+                  ranking[selectedSchools[i]] < ranking[selectedSchools[i + 1]]
+                  or ranking[selectedSchools[i]] == ranking[selectedSchools[i + 1]]
+              ):
+                  selectedSchools[i], selectedSchools[i + 1] = (
+                      selectedSchools[i + 1],
+                      selectedSchools[i],
+                  )
+  ranked_schools = {}
+  for i, school in enumerate(selectedSchools):
+      ranked_schools[school] = {
+          "Rank": i + 1,
+          "Total": dataBase[school][selection],
+      }
+  return ranked_schools
 
 
 def setup(fileName):
@@ -245,32 +254,30 @@ def northernBreakdown():
   school = "Northern York"
   dispSchool(school, False, recentScoresWP)
   
+  selectedSchoolsNP = getDivisionSchools("Liberty A", schoolsNP, recentScoresNP)
+  ranksNP = rankSchools(selectedSchoolsNP, "Total", recentScoresNP)
+  print(f'{school} Placed {ranksNP[school]["Rank"]} Out Of {len(selectedSchoolsNP)} In Liberty A.')
   
-  selectedSchoolsNP = getDivisionSchools("Yankee A", schoolsNP, recentScoresNP)
-  rankedSchools = rankSchools(selectedSchoolsNP, "Total", recentScoresNP)
-  print(f'{school} Placed {recentScoresNP[school]["Rank"]} Out Of {len(selectedSchoolsNP)} In Yankee A.')
+  ranksNP = rankSchools(schoolsNP, "Total", recentScoresNP)
+  print(f'{school} Placed {ranksNP[school]["Rank"]} Out Of {len(schoolsNP)} Out Of Calvalcade.\n')
   
-  rankedSchools = rankSchools(schoolsNP, "Total", recentScoresNP)
-  print(f'{school} Placed {recentScoresNP[school]["Rank"]} Out Of {len(schoolsNP)} Out Of Calvalcade.\n')
+
+  selectedSchoolsWP = getDivisionSchools("Liberty A", schoolsWP, recentScoresWP)
+  ranksWP = rankSchools(selectedSchoolsWP, "Percussion", recentScoresWP)
+  print(f'{school}\'s Percussion Placed {ranksWP[school]["Rank"]} Out Of {len(selectedSchoolsWP)} In Liberty A.')
   
-  
-  selectedSchoolsWP = getDivisionSchools("Yankee A", schoolsWP, recentScoresWP)
-  rankedSchools = rankSchools(selectedSchoolsWP, "Total", recentScoresWP)
-  #print(f'{school}\'s Percussion Placed {recentScoresWP[school]["Rank"]} Out Of {len(selectedSchoolsWP)} In Yankee A.')
-  print(f'{school}\'s Percussion Placed 1 Out Of {len(selectedSchoolsWP)} In Yankee A.')
-  
-  rankedSchools = rankSchools(schoolsWP, "Total", recentScoresWP)
-  #print(f'{school}\'s Percussion Placed {recentScoresWP[school]["Rank"]} Out Of {len(schoolsWP)} Out Of Calvalcade.\n')
-  print(f'{school}\'s Percussion Placed 10 Out Of {len(schoolsWP)} Out Of Calvalcade.\n')
+  ranksWP = rankSchools(schoolsWP, "Percussion", recentScoresWP)
+  print(f'{school}\'s Percussion Placed {ranksWP[school]["Rank"]} Out Of {len(schoolsWP)} Out Of Calvalcade.\n')
   
   
-  selectedSchoolsA = getDivisionSchools("Yankee A", schoolsA, recentScoresA)
-  rankedSchools = rankSchools(selectedSchoolsA, "Total", recentScoresA)
-  print(f'{school}\'s Gaurd Placed {recentScoresA[school]["Rank"]} Out Of {len(selectedSchoolsA)} In Yankee A.')
+  selectedSchoolsA = getDivisionSchools("Liberty A", schoolsA, recentScoresA)
+  ranksA = rankSchools(selectedSchoolsA, "Auxiliary", recentScoresA)
+  print(f'{school}\'s Gaurd Placed {ranksA[school]["Rank"]} Out Of {len(selectedSchoolsA)} In Liberty A.')
   
-  rankedSchools = rankSchools(schoolsA, "Total", recentScoresA)
-  #print(f'{school}\'s Gaurd Placed {recentScoresA[school]["Rank"]} Out Of {len(schoolsA)} Out Of Calvalcade.\n')
-  print(f'{school}\'s Gaurd Placed 34 Out Of {len(schoolsA)} Out Of Calvalcade.\n')
+  ranksA = rankSchools(schoolsA, "Auxiliary", recentScoresA)
+  print(f'{school}\'s Gaurd Placed {ranksA[school]["Rank"]} Out Of {len(schoolsA)} Out Of Calvalcade.\n')
+
+  return recentScoresWP, recentScoresNP, recentScoresA
   
 
 def main():
@@ -279,7 +286,7 @@ def main():
     choice = input("Type 1 For Northern York Breakdown Or 2 For Manual Selection. ")
     
   if choice == '1':
-    northernBreakdown()
+    recentScoresWP, recentScoresNP, recentScoresA = northernBreakdown()
   
   if choice == '2':
     print("Databases:\n\t1: Comps With Percussion Judges\n\t2: Comps With No Special Judges\n\t3: Comps With Auxiliary Judges")
@@ -297,7 +304,7 @@ def main():
   
   
 if __name__ == '__main__':
-  print("Cavalcade 2022 Analyzer\n")
+  print("Cavalcade 2023 Analyzer\n")
   try:
     main()
   except:
