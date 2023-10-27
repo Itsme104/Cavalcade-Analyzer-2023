@@ -252,27 +252,28 @@ def northernBreakdown():
     divisionsA.add(recentScoresA[school]['Division'])
   
   school = "Northern York"
+  division = recentScoresNP[school]["Division"]
   dispSchool(school, False, recentScoresWP)
   
-  selectedSchoolsNP = getDivisionSchools("Liberty A", schoolsNP, recentScoresNP)
+  selectedSchoolsNP = getDivisionSchools(division, schoolsNP, recentScoresNP)
   ranksNP = rankSchools(selectedSchoolsNP, "Total", recentScoresNP)
-  print(f'{school} Placed {ranksNP[school]["Rank"]} Out Of {len(selectedSchoolsNP)} In Liberty A.')
+  print(f'{school} Placed {ranksNP[school]["Rank"]} Out Of {len(selectedSchoolsNP)} In {division}.')
   
   ranksNP = rankSchools(schoolsNP, "Total", recentScoresNP)
   print(f'{school} Placed {ranksNP[school]["Rank"]} Out Of {len(schoolsNP)} Out Of Calvalcade.\n')
   
 
-  selectedSchoolsWP = getDivisionSchools("Liberty A", schoolsWP, recentScoresWP)
+  selectedSchoolsWP = getDivisionSchools(division, schoolsWP, recentScoresWP)
   ranksWP = rankSchools(selectedSchoolsWP, "Percussion", recentScoresWP)
-  print(f'{school}\'s Percussion Placed {ranksWP[school]["Rank"]} Out Of {len(selectedSchoolsWP)} In Liberty A.')
+  print(f'{school}\'s Percussion Placed {ranksWP[school]["Rank"]} Out Of {len(selectedSchoolsWP)} In {division}.')
   
   ranksWP = rankSchools(schoolsWP, "Percussion", recentScoresWP)
   print(f'{school}\'s Percussion Placed {ranksWP[school]["Rank"]} Out Of {len(schoolsWP)} Out Of Calvalcade.\n')
   
   
-  selectedSchoolsA = getDivisionSchools("Liberty A", schoolsA, recentScoresA)
+  selectedSchoolsA = getDivisionSchools(division, schoolsA, recentScoresA)
   ranksA = rankSchools(selectedSchoolsA, "Auxiliary", recentScoresA)
-  print(f'{school}\'s Gaurd Placed {ranksA[school]["Rank"]} Out Of {len(selectedSchoolsA)} In Liberty A.')
+  print(f'{school}\'s Gaurd Placed {ranksA[school]["Rank"]} Out Of {len(selectedSchoolsA)} In {division}.')
   
   ranksA = rankSchools(schoolsA, "Auxiliary", recentScoresA)
   print(f'{school}\'s Gaurd Placed {ranksA[school]["Rank"]} Out Of {len(schoolsA)} Out Of Calvalcade.\n')
